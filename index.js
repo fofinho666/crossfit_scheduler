@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const booking_class = require('./booking_class');
 const express = require('express');

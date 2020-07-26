@@ -1,6 +1,6 @@
+require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
-require('dotenv').config();
 
 function string_date(next_days = 0){
   let today = new Date();
