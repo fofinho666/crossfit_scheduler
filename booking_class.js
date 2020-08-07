@@ -18,12 +18,11 @@ const automation = async (crossfit_class_local, crossfit_class_hour, days_in_adv
 
   const browser = await puppeteer.launch({headless: true});
   const page = await browser.newPage();
+  // Configure the navigation timeout
+  await page.setDefaultNavigationTimeout(0);
 
   try {
     await page.goto(process.env.REGIBOX_URL);
-    // the page clock is some seconds delayed
-    await page.waitFor(3500);
-
     // search for the box
     await page.waitFor('input[type=search]');
     await page.type('input[type=search]', process.env.BOX_NAME);
@@ -36,8 +35,13 @@ const automation = async (crossfit_class_local, crossfit_class_hour, days_in_adv
     await page.type('input[name=password]', process.env.PASSWORD);
     await page.click('input[value=LOGIN]');
 
-    // wait for slapsh screen to disappear
-    await page.waitFor('div[id="splash_screen"]', {visible: false});
+    // check if there is a notification
+    const notification_xpath = '//*[contains(text(), "Remind me later")]';
+    const notification = await page.$x(notification_xpath);
+    if (notification.length != 0) {
+      await notification[0].click();
+    }
+    await page.waitForSelector('div[class~=backdrop-in]', {hidden: true});
 
     // enter registe class page
     const registe_class_selector = "#feed_minhas_aulasxxx > div > div > div.card-footer > a:nth-child(1)";
@@ -50,11 +54,11 @@ const automation = async (crossfit_class_local, crossfit_class_hour, days_in_adv
 
     // select the day to schedule
     const crossfit_class_selector = `div[data-date="${crossfit_class_date}"]`;
+    await page.waitFor(crossfit_class_selector);
     await page.click(crossfit_class_selector);
     await page.waitFor(`${crossfit_class_selector}[class~="calendar-day-selected"]`);
 
     // register the class hour
-
     const register_button_xpath = `//*[contains(text(), '${crossfit_class_local}')]/../../div[3]/div[contains(text(), '${crossfit_class_hour}')]/../div[3]/button`;
     const register_button = await page.$x(register_button_xpath);
     if (register_button.length == 0) {
@@ -65,8 +69,9 @@ const automation = async (crossfit_class_local, crossfit_class_hour, days_in_adv
       });
       throw `Register button for class at '${crossfit_class_hour}' not found`;
     }
-
     await register_button[0].click();
+
+    // wait for confirmation
     await page.waitFor('button[class="col button button-small button-fill color-red"]', {visible: true});
     await browser.close();
   }
