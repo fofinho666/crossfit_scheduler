@@ -2,7 +2,7 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
 
-function string_date(next_days = 0){
+function stringDate(next_days = 0){
   let today = new Date();
   today.setDate(today.getDate() + next_days);
 
@@ -13,9 +13,7 @@ function string_date(next_days = 0){
   return (yyyy + '-' + m + '-' + d);
 }
 
-const automation = async (crossfit_class_local, crossfit_class_hour, days_in_advance_registration) => {
-  const crossfit_class_date = string_date(days_in_advance_registration);
-
+const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRegistration) => {
   const browser = await puppeteer.launch({headless: true});
   const page = await browser.newPage();
   // Configure the navigation timeout
@@ -36,55 +34,53 @@ const automation = async (crossfit_class_local, crossfit_class_hour, days_in_adv
     await page.click('input[value=LOGIN]');
 
     // check if there is a notification
-    const notification_xpath = '//*[contains(text(), "Remind me later")]';
-    const notification = await page.$x(notification_xpath);
+    const notificationXpath = '//*[contains(text(), "Remind me later")]';
+    const notification = await page.$x(notificationXpath);
     if (notification.length != 0) {
       await notification[0].click();
     }
     await page.waitForSelector('div[class~=backdrop-in]', {hidden: true});
 
     // enter registe class page
-    const registe_class_selector = "#feed_minhas_aulasxxx > div > div > div.card-footer > a:nth-child(1)";
-    await page.waitForSelector(registe_class_selector, {visible: true});
-    await page.click(registe_class_selector);
+    const registeClassSelector = "#feed_minhas_aulasxxx > div > div > div.card-footer > a:nth-child(1)";
+    await page.waitForSelector(registeClassSelector, {visible: true});
+    await page.click(registeClassSelector);
 
     // wait for the registe class page to load
     await page.waitForSelector('div[class~=router-transition-forward]');
     await page.waitForSelector('div[class~=router-transition-forward]', {hidden: true});
 
     // select the day to schedule
-    const crossfit_class_selector = `div[data-date="${crossfit_class_date}"]`;
-    await page.waitFor(crossfit_class_selector);
-    await page.click(crossfit_class_selector);
-    await page.waitFor(`${crossfit_class_selector}[class~="calendar-day-selected"]`);
+    const crossfitClassDate = stringDate(daysInAdvanceRegistration);
+    const crossfitClassSelector = `div[data-date="${crossfitClassDate}"]`;
+    await page.waitFor(crossfitClassSelector);
+    await page.click(crossfitClassSelector);
+    await page.waitFor(`${crossfitClassSelector}[class~="calendar-day-selected"]`);
 
     // register the class hour
-    const register_button_xpath = `//*[contains(text(), '${crossfit_class_local}')]/../../div[3]/div[contains(text(), '${crossfit_class_hour}')]/../div[3]/button`;
-    const register_button = await page.$x(register_button_xpath);
-    if (register_button.length == 0) {
+    const registerButtonXpath = `//*[contains(text(), '${crossfitClassLocal}')]/../../div[3]/div[contains(text(), '${crossfitClassHour}')]/../div[3]/button`;
+    const registerButton = await page.$x(registerButtonXpath);
+    if (registerButton.length == 0) {
       // scroll down to see the missing button
       await page.evaluate(() => {
         let elem = document.querySelector("#feed_cal");
         elem.scrollTop = elem.scrollHeight;
       });
-      throw `Register button for class at '${crossfit_class_hour}' not found`;
+      throw `Register button for class at '${crossfitClassHour}' not found`;
     }
-    await register_button[0].click();
+    await registerButton[0].click();
 
     // wait for confirmation
     await page.waitFor('button[class="col button button-small button-fill color-red"]', {visible: true});
     await browser.close();
   }
   catch (e) {
-    const error_date = + new Date;
-    const error_dir = process.env.ERROR_DIR
-    // const error_html = await page.content();
+    const errorDate = stringDate();
+    const errorDir = process.env.ERROR_DIR
 
-    if (!fs.existsSync(error_dir)) fs.mkdirSync(error_dir);
-    // fs.writeFileSync(`${error_dir}/${error_date}_error_dump.txt`, `${e} ${e.stack}`);
-    // fs.writeFileSync(`${error_dir}/${error_date}_html_dump.html`, error_html);
+    if (!fs.existsSync(errorDir)) fs.mkdirSync(errorDir);
 
-    await page.screenshot({path: `${error_dir}/${error_date}_screenshot.png`});
+    await page.screenshot({path: `${errorDir}/${errorDate}_screenshot.png`});
 
     await browser.close();
     throw e
