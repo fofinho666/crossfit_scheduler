@@ -8,6 +8,7 @@ We have the following dependences to run this project:
 
 - [Node.js](https://nodejs.org/en/) v10 or above
 - [MongoDB](https://www.mongodb.com/) v2.6 or above
+- [Chromium](https://www.chromium.org/)
 
 **Note:** To run this on a **RaspberryPI** we must have chromium installed before installing the project dependencies:
 ```bash

@@ -5,7 +5,7 @@ const Agenda = require('agenda');
 const Agendash = require('agendash');
 
 const app = express();
-const agenda = new Agenda({db: {address: process.env.MONGO_URL,  options: {useUnifiedTopology: true}}});
+const agenda = new Agenda({ db: { address: process.env.MONGO_URL, options: { useUnifiedTopology: true } } });
 
 const appTitle = "CrossFit Scheduler";
 const port = parseInt(process.env.PORT)
@@ -17,15 +17,22 @@ const defaultCrossfitClassReservation = {
   daysInAdvance: parseInt(process.env.DEFAULT_DAYS_IN_ADVANCE_REGISTRATION)
 }
 agenda.define('CrossFit Class', async job => {
-	const {local, hour, daysInAdvance} = job.attrs.data;
+  const { local, hour, daysInAdvance } = job.attrs.data;
   await booking_class.automation(local, hour, daysInAdvance);
 });
 
-(async function() {
+(async function () {
   await agenda.start();
-  agenda.every(defaultCrossfitClassCron, 'CrossFit Class', defaultCrossfitClassReservation);
+
+  agenda.every(
+    defaultCrossfitClassCron,
+    'CrossFit Class',
+    defaultCrossfitClassReservation,
+    { timezone: 'Europe/Lisbon' }
+  );
+
 })();
 
-app.use('/', Agendash(agenda, {title: appTitle}));
+app.use('/', Agendash(agenda, { title: appTitle }));
 
 app.listen(port, () => console.log(`${appTitle} listening at http://localhost:${port}`))

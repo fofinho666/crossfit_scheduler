@@ -2,7 +2,7 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
 
-function stringDate(next_days = 0){
+function stringDate(next_days = 0) {
   let today = new Date();
   today.setDate(today.getDate() + next_days);
 
@@ -14,7 +14,7 @@ function stringDate(next_days = 0){
 }
 
 const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRegistration) => {
-  const browser = await puppeteer.launch({headless: true});
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   // Configure the navigation timeout
   await page.setDefaultNavigationTimeout(0);
@@ -39,16 +39,16 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     if (notification.length != 0) {
       await notification[0].click();
     }
-    await page.waitForSelector('div[class~=backdrop-in]', {hidden: true});
+    await page.waitForSelector('div[class~=backdrop-in]', { hidden: true });
 
     // enter registe class page
     const registeClassSelector = "#feed_minhas_aulasxxx > div > div > div.card-footer > a:nth-child(1)";
-    await page.waitForSelector(registeClassSelector, {visible: true});
+    await page.waitForSelector(registeClassSelector, { visible: true });
     await page.click(registeClassSelector);
 
     // wait for the registe class page to load
     await page.waitForSelector('div[class~=router-transition-forward]');
-    await page.waitForSelector('div[class~=router-transition-forward]', {hidden: true});
+    await page.waitForSelector('div[class~=router-transition-forward]', { hidden: true });
 
     // select the day to schedule
     const crossfitClassDate = stringDate(daysInAdvanceRegistration);
@@ -71,7 +71,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     await registerButton[0].click();
 
     // wait for confirmation
-    await page.waitFor('button[class="col button button-small button-fill color-red"]', {visible: true});
+    await page.waitFor('button[class="col button button-small button-fill color-red"]', { visible: true });
     await browser.close();
   }
   catch (e) {
@@ -80,7 +80,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
 
     if (!fs.existsSync(errorDir)) fs.mkdirSync(errorDir);
 
-    await page.screenshot({path: `${errorDir}/${errorDate}_screenshot.png`});
+    await page.screenshot({ path: `${errorDir}/${errorDate}_screenshot.png` });
 
     await browser.close();
     throw e
