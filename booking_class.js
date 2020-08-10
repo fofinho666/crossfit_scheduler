@@ -33,13 +33,16 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     await page.type('input[name=password]', process.env.PASSWORD);
     await page.click('input[value=LOGIN]');
 
+    // wait for splash screen to go away
+    await page.waitFor(2000);
+
     // check if there is a notification
     const notificationXpath = '//*[contains(text(), "Remind me later")]';
     const notification = await page.$x(notificationXpath);
     if (notification.length != 0) {
       await notification[0].click();
+      await page.waitFor(500);
     }
-    await page.waitForSelector('div[class~=backdrop-in]', { hidden: true });
 
     // enter registe class page
     const registeClassSelector = "#feed_minhas_aulasxxx > div > div > div.card-footer > a:nth-child(1)";
@@ -53,7 +56,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     // select the day to schedule
     const crossfitClassDate = stringDate(daysInAdvanceRegistration);
     const crossfitClassSelector = `div[data-date="${crossfitClassDate}"]`;
-    await page.waitFor(crossfitClassSelector);
+    await page.waitForSelector(crossfitClassSelector);
     await page.click(crossfitClassSelector);
     await page.waitFor(`${crossfitClassSelector}[class~="calendar-day-selected"]`);
 
