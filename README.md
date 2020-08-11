@@ -8,14 +8,7 @@ We have the following dependences to run this project:
 
 - [Node.js](https://nodejs.org/en/) v10 or above
 - [MongoDB](https://www.mongodb.com/) v2.6 or above
-- [Chromium](https://www.chromium.org/)
-
-**Note:** To run this on a **RaspberryPI** we must have chromium installed before installing the project dependencies:
-```bash
-$ sudo apt update
-$ sudo apt upgrade
-$ sudo apt install -y chromium-browser
-```
+- [Chromium](https://www.chromium.org/) to run Puppeteer
 
 A `.env` file is also required. Here's an example of it:
 ```bash
@@ -30,6 +23,8 @@ DEFAULT_CROSSFIT_CLASS_CRON="10 19 * * 0-3,6"
 ERROR_DIR="./error"
 MONGODB_URI="mongodb://127.0.0.1:27017/agenda"
 PORT="3000"
+AUTH_USERNAME="admin"
+AUTH_PASSWORD="admin"
 ```
 
 ### Development

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const booking_class = require('./booking_class');
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 const Agenda = require('agenda');
 const Agendash = require('agendash');
 
@@ -32,6 +33,10 @@ agenda.define('CrossFit Class', async job => {
   );
 
 })();
+
+let basicAuthUsers = {};
+basicAuthUsers[process.env.AUTH_USERNAME] = process.env.AUTH_PASSWORD
+app.use(basicAuth({ users: basicAuthUsers, challenge: true }));
 
 app.use('/', Agendash(agenda, { title: appTitle }));
 
