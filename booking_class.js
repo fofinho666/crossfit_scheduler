@@ -14,7 +14,7 @@ function stringDate(next_days = 0) {
 }
 
 const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRegistration) => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   // Configure the navigation timeout
   await page.setDefaultNavigationTimeout(0);
