@@ -5,7 +5,7 @@ const Agenda = require('agenda');
 const Agendash = require('agendash');
 
 const app = express();
-const agenda = new Agenda({ db: { address: process.env.MONGO_URL, options: { useUnifiedTopology: true } } });
+const agenda = new Agenda({ db: { address: process.env.MONGODB_URI, options: { useUnifiedTopology: true } } });
 
 const appTitle = "CrossFit Scheduler";
 const port = parseInt(process.env.PORT)
