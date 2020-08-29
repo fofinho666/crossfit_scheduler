@@ -11,13 +11,15 @@ const agenda = new Agenda({ db: { address: process.env.MONGODB_URI, options: { u
 const appTitle = "CrossFit Scheduler";
 const port = parseInt(process.env.PORT)
 
-const defaultCrossfitClassCron = process.env.DEFAULT_CROSSFIT_CLASS_CRON;
-const defaultCrossfitClassReservation = {
-  local: process.env.DEFAULT_CROSSFIT_CLASS_LOCAL,
-  hour: process.env.DEFAULT_CROSSFIT_CLASS_HOUR,
-  daysInAdvance: parseInt(process.env.DEFAULT_DAYS_IN_ADVANCE_REGISTRATION)
-}
 agenda.define('CrossFit Class', async job => {
+  const { local, hour, daysInAdvance } = job.attrs.data;
+  await booking_class.automation(local, hour, daysInAdvance);
+});
+agenda.define('Weightlifting Class', async job => {
+  const { local, hour, daysInAdvance } = job.attrs.data;
+  await booking_class.automation(local, hour, daysInAdvance);
+});
+agenda.define('Gymnastics Class', async job => {
   const { local, hour, daysInAdvance } = job.attrs.data;
   await booking_class.automation(local, hour, daysInAdvance);
 });
@@ -25,10 +27,39 @@ agenda.define('CrossFit Class', async job => {
 (async function () {
   await agenda.start();
 
+  const crossfitClassReservation = {
+    local: "Rato",
+    hour: "18:05",
+    daysInAdvance: 2
+  }
   agenda.every(
-    defaultCrossfitClassCron,
+    "05 18 * * 0-3,6",
     'CrossFit Class',
-    defaultCrossfitClassReservation,
+    crossfitClassReservation,
+    { timezone: 'Europe/Lisbon' }
+  );
+
+  const weightliftingClassReservation = {
+    local: "Rato",
+    hour: "20:15",
+    daysInAdvance: 2
+  }
+  agenda.every(
+    "15 20 * * 6",
+    'Weightlifting Class',
+    weightliftingClassReservation,
+    { timezone: 'Europe/Lisbon' }
+  );
+
+  const gymnasticsClassReservation = {
+    local: "Rato",
+    hour: "09:00",
+    daysInAdvance: 2
+  }
+  agenda.every(
+    "00 09 * * 4",
+    'Gymnastics Class',
+    gymnasticsClassReservation,
     { timezone: 'Europe/Lisbon' }
   );
 
