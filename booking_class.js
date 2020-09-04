@@ -2,9 +2,9 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
 
-function stringDate(next_days = 0) {
+function genCrossfitClassDate(daysInAdvance) {
   let today = new Date();
-  today.setDate(today.getDate() + next_days);
+  today.setDate(today.getDate() + daysInAdvance);
 
   const d = String(today.getDate());
   const m = String(today.getMonth());
@@ -55,7 +55,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     await page.waitForSelector('div[class~=router-transition-forward]', { hidden: true });
 
     // select the day to schedule
-    const crossfitClassDate = stringDate(daysInAdvanceRegistration);
+    const crossfitClassDate = genCrossfitClassDate(daysInAdvance);
     const crossfitClassSelector = `div[data-date="${crossfitClassDate}"]`;
     await page.waitForSelector(crossfitClassSelector);
     await page.click(crossfitClassSelector);
@@ -79,7 +79,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvanceRe
     await browser.close();
   }
   catch (e) {
-    const errorDate = stringDate();
+    const errorDate = new Date().toLocaleString().replace(', ', '_').replace(/[\/,\s]/g, '_');
     const errorDir = process.env.ERROR_DIR
 
     if (!fs.existsSync(errorDir)) fs.mkdirSync(errorDir);
