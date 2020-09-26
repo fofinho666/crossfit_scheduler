@@ -1,5 +1,5 @@
 require('dotenv').config();
-const booking_class = require('./booking_class');
+const bookingClassJob = require('./jobs/booking_class_job');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const Agenda = require('agenda');
@@ -20,15 +20,15 @@ async function main() {
   });
   agenda.define('CrossFit Class', async job => {
     const { local, hour, daysInAdvance } = job.attrs.data;
-    await booking_class.automation(local, hour, daysInAdvance);
+    await bookingClassJob.run(client, local, hour, daysInAdvance);
   });
   agenda.define('Weightlifting Class', async job => {
     const { local, hour, daysInAdvance } = job.attrs.data;
-    await booking_class.automation(local, hour, daysInAdvance);
+    await bookingClassJob.run(client, local, hour, daysInAdvance);
   });
   agenda.define('Gymnastics Class', async job => {
     const { local, hour, daysInAdvance } = job.attrs.data;
-    await booking_class.automation(local, hour, daysInAdvance);
+    await bookingClassJob.run(client, local, hour, daysInAdvance);
   });
 
   // Wait for agenda to connect. Should never fail since connection failures

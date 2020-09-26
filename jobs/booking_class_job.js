@@ -13,36 +13,25 @@ function genCrossfitClassDate(daysInAdvance) {
   return (yyyy + '-' + m + '-' + d);
 }
 
-const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
+  const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   // Configure the navigation timeout
-  await page.setDefaultNavigationTimeout(0);
+  page.setDefaultNavigationTimeout(0);
 
   try {
     await page.goto(process.env.REGIBOX_URL);
-    // search for the box
-    await page.waitFor('input[type=search]');
-    await page.type('input[type=search]', process.env.BOX_NAME);
-    await page.waitFor(250);
-    await page.click('li[class="item-content"]');
-
-    // login
-    await page.waitFor('div.page-current > div[class~="login-screen-content"]');
-    await page.type('input[name=login]', process.env.LOGIN);
-    await page.type('input[name=password]', process.env.PASSWORD);
-    await page.click('input[value=LOGIN]');
 
     // wait for splash screen to go away
-    await page.waitFor('div[id="splash_screen"]', {visible: false});
-    await page.waitFor(2500);
+    await page.waitForSelector('div[id="splash_screen"]', {visible: false});
+    await page.waitForTimeout(1500);
 
     // check if there is a notification
     const notificationXpath = '//div[@class="but_back"]';
     const notification = await page.$x(notificationXpath);
     if (notification.length != 0) {
       await notification[0].click();
-      await page.waitFor(500);
+      await page.waitForTimeout(500);
     }
 
     // enter registe class page
@@ -63,7 +52,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) 
     await page.click(crossfitClassSelector);
 
     const selectedCrossfitClassSelector = `${crossfitClassDateSelector}[class~="calendar-day-selected"]`;
-    await page.waitFor(selectedCrossfitClassSelector);
+    await page.waitForSelector(selectedCrossfitClassSelector);
 
     // register the class hour
     const registerButtonXpath = `//*[contains(text(), '${crossfitClassLocal}')]/../../div[3]/div[contains(text(), '${crossfitClassHour}')]/../div[3]/button`;
@@ -79,7 +68,7 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) 
     await registerButton[0].click();
 
     // wait for confirmation
-    await page.waitFor('button[class="col button button-small button-fill color-red"]', { visible: true });
+    await page.waitForSelector('button[class="col button button-small button-fill color-red"]', { visible: true });
     await browser.close();
   }
   catch (e) {
@@ -95,4 +84,4 @@ const automation = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) 
   }
 }
 
-exports.automation = automation;
+exports.run = run;
