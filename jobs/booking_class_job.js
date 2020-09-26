@@ -1,6 +1,8 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
+const {loginAndSaveCookies} = require('./cookie_job');
+const {loadCookies} = require('../services/cookie_sevices')
 
 function genCrossfitClassDate(daysInAdvance) {
   let today = new Date();
@@ -13,18 +15,26 @@ function genCrossfitClassDate(daysInAdvance) {
   return (yyyy + '-' + m + '-' + d);
 }
 
-const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
-  const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] });
-  const page = await browser.newPage();
+const run = async (mongoClient, crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
+  const base_url = process.env.REGIBOX_URL;
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+  const [page] = await browser.pages();
   // Configure the navigation timeout
   page.setDefaultNavigationTimeout(0);
 
   try {
-    await page.goto(process.env.REGIBOX_URL);
+    const cookies = await loadCookies(mongoClient);
+    page.setCookie(...cookies);
 
-    // wait for splash screen to go away
-    await page.waitForSelector('div[id="splash_screen"]', {visible: false});
-    await page.waitForTimeout(1500);
+    await page.goto(base_url);
+
+    if (page.url() === `${base_url}/login.php`){
+      await loginAndSaveCookies(page, mongoClient);
+    }
+    else{
+      // wait for splash screen to go away
+      await page.waitForTimeout(1500);
+    }
 
     // check if there is a notification
     const notificationXpath = '//div[@class="but_back"]';
