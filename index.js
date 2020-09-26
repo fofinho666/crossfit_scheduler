@@ -1,5 +1,6 @@
 require('dotenv').config();
 const bookingClassJob = require('./jobs/booking_class_job');
+const CookieJob = require('./jobs/cookie_job');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const Agenda = require('agenda');
@@ -15,8 +16,8 @@ async function main() {
   const client = await MongoClient.connect(process.env.MONGODB_URI, { useUnifiedTopology: true });
   const agenda = new Agenda({mongo: client.db('agenda')});
 
-  agenda.define('Get Cookie', async job => {
-    await booking_class.automation(local, hour, daysInAdvance);
+  agenda.define('Refresh Cookie', async () => {
+    await CookieJob.run(client);
   });
   agenda.define('CrossFit Class', async job => {
     const { local, hour, daysInAdvance } = job.attrs.data;
@@ -35,11 +36,17 @@ async function main() {
   // should happen in the `await MongoClient.connect()` call.
   await new Promise(resolve => agenda.once('ready', resolve));
 
+  agenda.every(
+    "0 0 * * 6",
+    'Refresh Cookie',
+    { timezone: 'Europe/Lisbon' }
+  );
+
   const crossfitClassReservation = {
     local: "Rato",
     hour: "18:05",
     daysInAdvance: 2
-  }
+  };
   agenda.every(
     "05 18 * * 0-3,6",
     'CrossFit Class',
@@ -51,7 +58,7 @@ async function main() {
     local: "Rato",
     hour: "20:15",
     daysInAdvance: 2
-  }
+  };
   agenda.every(
     "15 20 * * 6",
     'Weightlifting Class',
@@ -63,7 +70,7 @@ async function main() {
     local: "Rato",
     hour: "09:00",
     daysInAdvance: 2
-  }
+  };
   agenda.every(
     "00 09 * * 4",
     'Gymnastics Class',
