@@ -74,6 +74,14 @@ const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
     }
     await registerButton[0].click();
 
+    // check if there is a modal-in notification
+    const modalXpath = '//div[contains(@class, "modal-in")]//span[text()="OK"]';
+    const modal = await page.$x(modalXpath);
+    if (modal.length != 0) {
+      await modal[0].click();
+      await page.waitForTimeout(500);
+    }
+
     // wait for confirmation
     await page.waitForSelector('button[class="col button button-small button-fill color-red"]', { visible: true });
     await browser.close();
