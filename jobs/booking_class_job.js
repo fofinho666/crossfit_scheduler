@@ -1,13 +1,13 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require("fs");
-const {loginAndSaveCookies} = require('./cookie_job');
-const {loadCookies} = require('../services/cookie_sevices')
+const { loginAndSaveCookies } = require('./cookie_job');
+const { loadCookies } = require('../services/cookie_sevices');
 const { add } = require('date-fns')
 
 function genCrossfitClassDateSelector(daysInAdvance) {
   const date = new Date()
-  const futurDate = add(date, {days: daysInAdvance});
+  const futurDate = add(date, { days: daysInAdvance });
   // the data-date value actualy has month 0 🤷‍♂️
   const dataDateValue = `${futurDate.getFullYear()}-${futurDate.getMonth()}-${futurDate.getDate()}`;
   return `div[class~="calendar-month-current"] div[data-date="${dataDateValue}"]`;
@@ -17,7 +17,7 @@ const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
   const base_url = process.env.REGIBOX_URL;
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const [page] = await browser.pages();
-  await page.setViewport({ width: 1280, height: 720});
+  await page.setViewport({ width: 1280, height: 720 });
   // Configure the navigation timeout
   page.setDefaultNavigationTimeout(0);
 
@@ -27,10 +27,10 @@ const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
 
     await page.goto(base_url);
 
-    if (page.url() === `${base_url}/login.php`){
+    if (page.url() === `${base_url}/login.php`) {
       await loginAndSaveCookies(page);
     }
-    else{
+    else {
       // wait for splash screen to go away
       await page.waitForTimeout(1500);
     }
@@ -62,7 +62,7 @@ const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
     await page.waitForSelector(selectedCrossfitClassSelector);
 
     // register the class hour
-    const registerButtonXpath = `//*[contains(text(), '${crossfitClassLocal}')]/../../div[3]/div[contains(text(), '${crossfitClassHour}')]/../div[3]/button`;
+    const registerButtonXpath = `//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') ,'${crossfitClassLocal.toLowerCase()}')]/../../div[3]/div[contains(text(), '${crossfitClassHour}')]/../div[3]/button`;
     const registerButton = await page.$x(registerButtonXpath);
     if (registerButton.length == 0) {
       // scroll down to see the missing button
@@ -88,14 +88,14 @@ const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
   }
   catch (e) {
     const errorDate = new Date().toLocaleString().replace(', ', '_').replace(/[,:\/\s]/g, '_');
-    const errorDir = process.env.ERROR_DIR
+    const errorDir = process.env.ERROR_DIR;
 
     if (!fs.existsSync(errorDir)) fs.mkdirSync(errorDir);
 
     await page.screenshot({ path: `${errorDir}/${errorDate}_screenshot.png` });
 
     await browser.close();
-    throw e
+    throw e;
   }
 }
 

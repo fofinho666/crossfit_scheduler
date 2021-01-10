@@ -14,7 +14,7 @@ async function main() {
 
   const app = express();
   const client = await db.client();
-  const agenda = new Agenda({mongo: client.db('agenda')});
+  const agenda = new Agenda({ mongo: client.db('agenda') });
 
   agenda.define('Refresh Cookie', async () => {
     await CookieJob.run();
@@ -43,7 +43,7 @@ async function main() {
 
   app.use('/', Agendash(agenda, { title: appTitle }));
 
-  app.listen(port, () => console.log(`${appTitle} listening at http://localhost:${port}`))
+  app.listen(port, () => console.log(`${appTitle} listening at http://localhost:${port}`));
 }
 
 main().catch(error => {
