@@ -9,12 +9,14 @@ const Agendash = require('agendash');
 
 async function main() {
   const appTitle = "CrossFit Scheduler";
-
   const port = parseInt(process.env.PORT)
-
   const app = express();
   const client = await db.client();
   const agenda = new Agenda({ mongo: client.db('agenda') });
+
+  let basicAuthUsers = {};
+  basicAuthUsers[process.env.AUTH_USERNAME] = process.env.AUTH_PASSWORD
+  app.use(basicAuth({ users: basicAuthUsers, challenge: true }));
 
   agenda.define('Refresh Cookie', async () => {
     await CookieJob.run();
@@ -36,11 +38,6 @@ async function main() {
   // should happen in the `await MongoClient.connect()` call.
   await new Promise(resolve => agenda.once('ready', resolve));
   agenda.start();
-
-  let basicAuthUsers = {};
-  basicAuthUsers[process.env.AUTH_USERNAME] = process.env.AUTH_PASSWORD
-  app.use(basicAuth({ users: basicAuthUsers, challenge: true }));
-
   app.use('/', Agendash(agenda, { title: appTitle }));
 
   app.listen(port, () => console.log(`${appTitle} listening at http://localhost:${port}`));
