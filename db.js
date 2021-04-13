@@ -1,24 +1,24 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient } = require("mongodb")
 
 const database = function () {
-    let _client = null;
+    let _client = null
 
     async function connect() {
         try {
-            return await MongoClient.connect(process.env.MONGODB_URI, { useUnifiedTopology: true });
+            return await MongoClient.connect(process.env.MONGODB_URI, { useUnifiedTopology: true })
         } catch (e) {
-            return e;
+            return e
         }
     }
 
-   async function client() {
+    async function client() {
         try {
             if (_client == null) {
-                _client = await connect();
+                _client = await connect()
             }
-            return _client;
+            return _client
         } catch (e) {
-            return e;
+            return e
         }
     }
 
@@ -27,4 +27,4 @@ const database = function () {
     }
 }
 
-module.exports = database();
+module.exports = database()
