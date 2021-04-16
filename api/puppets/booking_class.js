@@ -1,7 +1,7 @@
 require("dotenv").config()
 const puppeteer = require("puppeteer")
 const fs = require("fs")
-const { loginAndSaveCookies } = require("./cookie_job")
+const { loginAndSaveCookies } = require("./fetch_cookie")
 const { loadCookies } = require("../services/cookie_sevices")
 const { add } = require("date-fns")
 
@@ -15,7 +15,7 @@ function genCrossfitClassDateSelector(daysInAdvance) {
 
 const run = async (crossfitClassLocal, crossfitClassHour, daysInAdvance) => {
     const base_url = process.env.REGIBOX_URL
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] })
+    const browser = await puppeteer.launch({ headless: false, args: ["--no-sandbox"] })
     const [page] = await browser.pages()
     await page.setViewport({ width: 1280, height: 720 })
     // Configure the navigation timeout

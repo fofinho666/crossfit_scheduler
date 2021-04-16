@@ -4,24 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "lint": "eslint . --ext .js --fix",
     "db:start": "docker-compose down; docker-compose up -d",
     "db:stop": "docker-compose down"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "agenda": "^4.1.0",
-    "agendash": "^2.1.1",
-    "date-fns": "^2.19.0",
-    "dotenv": "^8.2.0",
-    "express-basic-auth": "^1.2.0",
-    "mongodb": "^3.6.5",
-    "puppeteer": "^8.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.24.0",
-    "eslint-plugin-react": "^7.23.2"
-  }
+  "license": "ISC"
 }
