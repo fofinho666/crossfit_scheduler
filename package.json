@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build && npm run api:start",
+    "api:start": "cd api; npm start; cd ..",
+    "build": "cd client; npm run build; cd ..",
     "db:start": "docker-compose down; docker-compose up -d",
     "db:stop": "docker-compose down"
   },

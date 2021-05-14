@@ -41,7 +41,7 @@ With the Docker up and running we can use the following commands:
 
 We can also install **PM2** to manage and daemonized the application.
 - `$ sudo npm install -g pm2` - Install PM2 globally
-- `$ pm2 start index.js --name crossfit-scheduler` - Start the application with PM2
+- `$ pm2 start npm --name crossfit-scheduler -- start` - Start the application with PM2
 - `$ pm2 startup systemd` - Generate the boot scripts
 - `$ pm2 save` - Save our modifications
 
