@@ -1,12 +1,14 @@
 import React from "react"
-import { Formik, Form } from 'formik'
+import { Formik, Form } from "formik"
 import { weeklyCron } from "../../services/translateToCron"
 import PuppetsForm from "../molecules/fromikForms/puppetsForm"
 import CronsFrom from "../molecules/fromikForms/cronsForm"
 import { postJob } from "../../services/jobsApi"
 import NameForm from "../molecules/fromikForms/nameForm"
+import { useJobs } from "../atoms/jobsProducer"
 
-const ScheduleJob = ({ onSave }) => {
+export default function JobForm() {
+  const {jobs, setJobs} = useJobs()
 
   const sanitazedObject = (value, filter) => (
     Object
@@ -39,7 +41,9 @@ const ScheduleJob = ({ onSave }) => {
       interval,
     }
 
-    postJob(payload).then(onSave)
+    postJob(payload)
+    .then(response=>response.json())
+    .then(data=>{ setJobs([...jobs, data]) })
   }
   
   return (<Formik initialValues={{}} onSubmit={submit} >
@@ -56,5 +60,3 @@ const ScheduleJob = ({ onSave }) => {
     )}
   </Formik>)
 }
-
-export default ScheduleJob

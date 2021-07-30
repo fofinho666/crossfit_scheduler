@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from "react"
-import { getJobs } from "../services/jobsApi"
+import React from "react"
+import JobPovider from "./atoms/jobsProducer"
 import JobList from "./molecules/jobList"
-import ScheduleJob from "./organisms/scheduleJob"
+import JobForm from "./organisms/jobForm"
 
 const App = () => {
 
-    const [jobs, setJobs] = useState([])
-
-    const loadJobs = () => { getJobs().then(setJobs) }
-
-    useEffect(() => { loadJobs() }, [])
 
     return <div className="container is-mobile">
-    <ScheduleJob onSave={loadJobs}/>
-    <JobList jobs={jobs}/>
+        <JobPovider>
+            <JobForm />
+            <JobList />
+        </JobPovider>
     </div>
 }
 
