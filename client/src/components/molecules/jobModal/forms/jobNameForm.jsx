@@ -1,7 +1,7 @@
 import React from "react"
-import TextField from "../formikFields/textField"
+import TextField from "../../../atoms/fields/textField"
 
-const NameForm = () => {
+const JobNameForm = () => {
   const validateName = (value) => {
     if (!value || value.trim() === "") {
       return "You must provide a valid name for the job"
@@ -15,5 +15,5 @@ const NameForm = () => {
   </div>
 }
 
-export default NameForm
+export default JobNameForm
 

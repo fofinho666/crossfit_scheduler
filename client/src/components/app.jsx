@@ -1,14 +1,14 @@
 import React from "react"
 import JobPovider from "./atoms/jobsProducer"
-import JobList from "./molecules/jobList"
-import JobForm from "./organisms/jobForm"
+import JobList from "./organisms/jobList"
+import NewJobButton from "./organisms/NewJobButton"
 
 const App = () => {
 
 
     return <div className="container is-mobile">
         <JobPovider>
-            <JobForm />
+            <NewJobButton />
             <JobList />
         </JobPovider>
     </div>

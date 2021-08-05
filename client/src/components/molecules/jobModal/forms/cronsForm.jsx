@@ -1,7 +1,7 @@
 import React from "react"
-import WeekDaysField from "../formikFields/weekDaysField"
-import TimeField from "../formikFields/timeField"
-import Tabs from "../tabs"
+import WeekDaysField from "../fields/weekDaysField"
+import TimeField from "../fields/timeField"
+import Tabs from "../../tabs"
 
 const CronsFrom = () => {
   return <>

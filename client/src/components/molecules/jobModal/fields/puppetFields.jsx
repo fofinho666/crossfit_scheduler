@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useFormikContext } from 'formik'
 import { sentenceCase } from "change-case";
-import TextField from "./textField";
+import TextField from "../../../atoms/fields/textField";
 
 const PuppetFields = ({ puppet }) => {
   const { setFieldValue } = useFormikContext()

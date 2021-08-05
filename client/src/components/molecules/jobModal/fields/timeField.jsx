@@ -1,6 +1,6 @@
 import React from "react"
 import { ErrorMessage, useField } from 'formik'
-import NumberField from "./numberField"
+import NumberField from "../../../atoms/fields/numberField"
 
 const TimeField = ({ labelledby }) => {
 
