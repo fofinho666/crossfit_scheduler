@@ -1,28 +1,31 @@
 import React from "react"
 import JobPovider from "./atoms/jobsProducer"
 import JobList from "./organisms/jobList"
-import NewJobButton from "./organisms/NewJobButton"
+import NewJobButton from "./organisms/newJobButton"
 
 const App = () => {
 
-
-    return <div className="container is-mobile">
-        <JobPovider>
-            <div className="navbar has-background-primary-dark">
-                <div class="navbar-start">
-                    <div class="navbar-item">
-                        <h1 class="title is-4 has-text-white">CrossFit Scheduler 🗓</h1>
+    return <JobPovider>
+        <div className="container">
+            
+            <section class="section has-background-primary-dark p-2">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+                        <div class="level-item ">
+                            <h1 className="title is-4 has-text-white">CrossFit Scheduler 🗓</h1>
+                        </div>
                     </div>
-                </div>
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <NewJobButton />
+                    <div class="level-right">
+                        <div class="level-item">
+                            <NewJobButton />
+                        </div>
                     </div>
-                </div>
-            </div>
+                </nav>
+            </section>
+            
             <JobList />
-        </JobPovider>
-    </div>
+        </div>
+    </JobPovider>
 }
 
 export default App

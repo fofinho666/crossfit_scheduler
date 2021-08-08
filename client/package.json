@@ -24,6 +24,7 @@
     "babel-plugin-jsx-control-statements": "^4.1.0",
     "bulma": "^0.9.3",
     "bulma-checkbox": "^1.1.1",
+    "bulma-responsive-tables": "^1.2.3",
     "css-loader": "^6.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^6.2.0",

@@ -291,3 +291,11 @@ body > .navbar {
   background-color: $grey-dark;
   color: $text;
 }
+
+.b-table .table-wrapper.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td  {
+  border-bottom: none;
+} 
+
+.modal-card{
+  overflow: auto;
+}

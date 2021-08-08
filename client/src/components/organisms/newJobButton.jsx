@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCalendarPlus } from "@fortawesome/free-solid-svg-icons"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import JobModal from "../molecules/jobModal/jobModal"
 
 const NewJobButton = () => {
@@ -12,7 +12,7 @@ const NewJobButton = () => {
   return <>
     <button className="button is-primary" onClick={openModal}>
       <span className="icon is-small">
-        <FontAwesomeIcon icon={faCalendarPlus} />
+        <FontAwesomeIcon icon={faPlus} />
       </span>
     </button>
     <JobModal title="New Job" activeModal={activeModal} closeModal={closeModal} />

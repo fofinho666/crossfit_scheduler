@@ -1,10 +1,8 @@
 import React from "react"
 
 
-const JobFailReason = ({ reason }) => <>
-  <p style={{ backgroundColor: "red" }}>failed:</p>
-  <p style={{ whiteSpace: "pre-line" }} >{reason}</p>
-</>
-
+const JobFailReason = ({ reason }) => <code style={{ whiteSpace: "pre-line" }}>
+  {reason}
+</code>
 
 export default JobFailReason

@@ -7,7 +7,7 @@ import JobNameForm from "./forms/jobNameForm"
 import { postJob } from "../../../services/jobsApi"
 import { weeklyCron } from "../../../services/translateToCron"
 
-export default function JobModal({ activeModal, closeModal, title}) {
+export default function JobModal({ activeModal, closeModal, title }) {
   const { jobs, setJobs } = useJobs()
 
   const modalClass = activeModal ? "modal is-active" : "modal"
@@ -52,29 +52,31 @@ export default function JobModal({ activeModal, closeModal, title}) {
     <div className={modalClass}>
       <div className="modal-background"></div>
       <div className="modal-card">
-      <header className="modal-card-head">
-        <p className="modal-card-title">{title}</p>
-        <button className="delete" aria-label="close" onClick={closeModal}></button>
-      </header>
-      
-      <Formik initialValues={{}} onSubmit={submit} >
-        {({ isValid, dirty }) => (
-          <Form>
-            <section className="modal-card-body">
-              <JobNameForm />
-              <PuppetsForm />
-              <CronsFrom />
-            </section>
-            <footer className="modal-card-foot">
-              <button className="button is-primary" type="submit" disabled={!(isValid && dirty)} onClick={closeModal} >Submit</button>
-              <button className="button" onClick={closeModal}>Cancel</button>
-            </footer>
+        <header className="modal-card-head">
+          <p className="modal-card-title">{title}</p>
+          <button className="delete" aria-label="close" onClick={closeModal}></button>
+        </header>
 
-          </Form>
-        )}
-      </Formik>
+        <Formik initialValues={{}} onSubmit={submit} >
+          {({ isValid, dirty }) => (
+            <Form>
+              
+              <section className="modal-card-body">
+                <JobNameForm />
+                <PuppetsForm />
+                <CronsFrom />
+              </section>
+              
+              <footer className="modal-card-foot">
+                <button className="button is-primary" type="submit" disabled={!(isValid && dirty)} onClick={closeModal} >Submit</button>
+                <button className="button" onClick={closeModal}>Cancel</button>
+              </footer>
 
+            </Form>
+          )}
+        </Formik>
+
+      </div>
     </div>
-  </div>
   </>
 }
