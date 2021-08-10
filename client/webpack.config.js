@@ -1,6 +1,6 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
-const {HotModuleReplacementPlugin} = require('webpack')
+const { HotModuleReplacementPlugin } = require('webpack')
 
 module.exports = {
     entry: path.join(__dirname, "src", "index.js"),
@@ -12,7 +12,7 @@ module.exports = {
     mode: process.env.NODE_ENV || "development",
     resolve: {
         modules: [path.resolve(__dirname, "src"), "node_modules"],
-        extensions: [".js", ".jsx"],
+        extensions: [".js", ".jsx", ".scss"],
     },
     devServer: {
         contentBase: path.join(__dirname, "src"),
@@ -31,8 +31,8 @@ module.exports = {
                 use: ["babel-loader"]
             },
             {
-                test: /\.(css)$/,
-                use: ["style-loader", "css-loader"],
+                test: /\.s[ac]ss$/,
+                use: ["style-loader", "css-loader", "sass-loader"],
             },
         ],
     },

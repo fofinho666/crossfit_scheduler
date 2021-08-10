@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { getPuppets } from "../../../services/puppetsApi"
-import PuppetFields from "../formikFields/puppetFields"
-import Tabs from "../tabs"
+import { getPuppets } from "../../../../services/puppetsApi"
+import PuppetFields from "../fields/puppetFields"
+import Tabs from "../../tabs"
 
 const PuppetsForm = () => {
     const [{ puppets, defaultPuppet }, setPuppets] = useState({ puppets: [], defaultPuppet: {} })
